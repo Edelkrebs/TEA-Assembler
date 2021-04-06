@@ -10,8 +10,9 @@ int main(int argc, char* argv[]){
 		printf("No input files specified. Aborting.\n");
 	}
 
+	readFileToBuffer(argv[1]);
+	printf("%s\n", file_buffer[0]);
 	initInstructionset();
-	printf("%p\n", getInstruction("ADC"));
 
 	return 0;	
 

@@ -17,6 +17,5 @@ void readFileToBuffer(const char* file_name){
 		}
 		file_buffer[line_index][index] = c;
 	}
-
-	file_buffer[line_index][index + 1] = '\0'; 				// Null terminate the last line.
+	
 }

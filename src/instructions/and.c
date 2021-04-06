@@ -4,21 +4,21 @@
 static uint8_t opcode(MODES mode){
 	switch(mode){
 		case IMMEDIATE: {
-			return 0x69;
+			return 0x29;
 		}case ZERO_PAGE: {
-			return 0x65;
+			return 0x25;
 		}case ZERO_PAGE_X: {
-			return 0x75;
+			return 0x35;
 		}case ABSOLUTE: {
-			return 0x6D;
+			return 0x2D;
 		}case ABSOLUTE_X: {
-			return 0x7D;
+			return 0x3D;
 		}case ABSOLUTE_Y: {
-			return 0x79;
+			return 0x39;
 		}case INDIRECT_X: {
-			return 0x61;
+			return 0x21;
 		}case INDIRECT_Y: {
-			return 0x71;
+			return 0x31;
 		}default:{
 			return -1;
 		}
@@ -53,21 +53,21 @@ __attribute__((unused)) static uint8_t* decode_instruction(uint16_t argument, MO
 	return generate_opcode_string(size(mode), mode, opcode(mode), argument);
 }
 
-Instruction* registerADCInstruction(){
-	Instruction* adc = (Instruction*) malloc(sizeof(Instruction));
-	adc->name = "ADC";
-	adc->modes_count = 8;
-	adc->modes = (MODES*) malloc(adc->modes_count * sizeof(int));
-	adc->modes[0] = IMMEDIATE;
-	adc->modes[1] = ZERO_PAGE;
-	adc->modes[2] = ZERO_PAGE_X;
-	adc->modes[3] = ABSOLUTE;
-	adc->modes[4] = ABSOLUTE_X;
-	adc->modes[5] = ABSOLUTE_Y;
-	adc->modes[6] = INDIRECT_X;
-	adc->modes[7] = INDIRECT_Y;
-	adc->opcode = &opcode;
-	adc->size = &size;	
-	adc->decode_instruction = &decode_instruction;
-	return adc;
+Instruction* registerANDInstruction(){
+	Instruction* and = (Instruction*) malloc(sizeof(Instruction));
+	and->name = "AND";
+	and->modes_count = 8;
+	and->modes = (MODES*) malloc(and->modes_count * sizeof(int));
+	and->modes[0] = IMMEDIATE;
+	and->modes[1] = ZERO_PAGE;
+	and->modes[2] = ZERO_PAGE_X;
+	and->modes[3] = ABSOLUTE;
+	and->modes[4] = ABSOLUTE_X;
+	and->modes[5] = ABSOLUTE_Y;
+	and->modes[6] = INDIRECT_X;
+	and->modes[7] = INDIRECT_Y;
+	and->opcode = &opcode;
+	and->size = &size;	
+	and->decode_instruction = &decode_instruction;
+	return and;
 }

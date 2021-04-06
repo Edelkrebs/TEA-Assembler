@@ -6,7 +6,7 @@ CC = gcc
 EXEC = assembler
 
 run: all
-	./$(EXEC)
+	./$(EXEC) test.asm
 
 all: $(OBJECTS)
 	$(CC) $^ -o $(EXEC) -Isrc/include -lgcc -Werror -Wall
