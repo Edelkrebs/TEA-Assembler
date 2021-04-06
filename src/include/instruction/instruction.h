@@ -1,7 +1,8 @@
 #ifndef __INSTRUCTION_H
 #define __INSTRUCTION_H
 
-#define REGISTER_INSTRUCTION(x) extern void register##x##Instruction(); register##x##Instruction();
+#define REGISTER_INSTRUCTION(x, y) extern Instruction* register##x##Instruction();\
+								   	  instructionset[y] = register##x##Instruction();\
 
 #include <stdint.h>
  
@@ -19,6 +20,7 @@ typedef enum{
 } MODES;
 
 typedef struct {
+	const char* name;
 	MODES* modes;
 	uint8_t modes_count;
 	uint8_t (*opcode)(MODES mode);
@@ -30,5 +32,6 @@ Instruction* instructionset[255];
 
 uint8_t* generate_opcode_string(uint8_t size, MODES mode, uint8_t opcode, uint16_t argument);
 void initInstructionset();
+Instruction* getInstruction(const char* name);
 
 #endif

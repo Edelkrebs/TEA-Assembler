@@ -11,12 +11,7 @@ int main(int argc, char* argv[]){
 	}
 
 	initInstructionset();
-	uint8_t* opcode_str = generate_opcode_string(3, ABSOLUTE, 0x6D, 0x4400);
-
-	printf("%x", opcode_str[0]);
-	printf("%x", opcode_str[1]);
-	printf("%x", opcode_str[2]);
-	printf("\n");
+	printf("%p\n", getInstruction("ADC"));
 
 	return 0;	
 

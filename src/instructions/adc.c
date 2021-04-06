@@ -53,8 +53,9 @@ uint8_t* decode_instruction(uint16_t argument, MODES mode){
 	return generate_opcode_string(size(mode), mode, opcode(mode), argument);
 }
 
-void registerADCInstruction(){
+Instruction* registerADCInstruction(){
 	Instruction* adc = (Instruction*) malloc(sizeof(Instruction));
+	adc->name = "ADC";
 	adc->modes = (MODES*) malloc(8 * sizeof(int));
 	adc->modes_count = 8;
 	adc->modes[0] = IMMEDIATE;
@@ -67,4 +68,5 @@ void registerADCInstruction(){
 	adc->modes[7] = INDIRECT_Y;
 	adc->opcode = &opcode;
 	adc->size = &size;	
+	return adc;
 }
