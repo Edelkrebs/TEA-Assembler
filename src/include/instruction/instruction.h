@@ -23,7 +23,7 @@ typedef struct {
 	uint8_t modes_count;
 	uint8_t (*opcode)(MODES mode);
 	uint8_t (*size)(MODES mode);
-	char* (*decode_instruction)(uint16_t argument, MODES mode);
+	uint8_t* (*decode_instruction)(uint16_t argument, MODES mode);
 } Instruction;
 
 Instruction* instructionset[255];

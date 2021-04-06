@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <fileio.h>
+#include <instruction/instruction.h>
 
 int main(int argc, char* argv[]){
 
@@ -9,7 +10,13 @@ int main(int argc, char* argv[]){
 		printf("No input files specified. Aborting.\n");
 	}
 
-	printf("%d\n",((0x6D << 24) | ((0x4400 & 0xFF) << 8) | (0x4400 & ~0xFF)));
+	initInstructionset();
+	uint8_t* opcode_str = generate_opcode_string(3, ABSOLUTE, 0x6D, 0x4400);
+
+	printf("%x", opcode_str[0]);
+	printf("%x", opcode_str[1]);
+	printf("%x", opcode_str[2]);
+	printf("\n");
 
 	return 0;	
 

@@ -3,31 +3,49 @@
 #include <stdio.h>
 
 uint8_t* generate_opcode_string(uint8_t size, MODES mode, uint8_t opcode, uint16_t argument){
-	if((mode == ABSOLUTE) && (size != 3)) || (mode == ABSOLUTE_X) && (size != 3)) || (mode == ABSOLUTE_Y) && (size != 3))){
+	if(((mode == ABSOLUTE) && (size != 3)) || ((mode == ABSOLUTE_X) && (size != 3)) || ((mode == ABSOLUTE_Y) && (size != 3))){
 		printf("Invalid operation size.Aborting\n");
 		exit(-1);
 	}
-	uint8_t* opcode_string = (char*) malloc(size * sizeof(char));
+	uint8_t* opcode_string = (uint8_t*) malloc(size * sizeof(uint8_t));
 	switch(mode){
 		case IMMEDIATE: {
 			opcode_string[0] = opcode;
 			opcode_string[1] = (uint8_t)argument;
+			return opcode_string;
 		}case ZERO_PAGE: {
-			
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)argument;
+			return opcode_string;
 		}case ZERO_PAGE_X: {
-			return 2;
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)argument;
+			return opcode_string;
 		}case ABSOLUTE: {
-			return 3;
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)(argument);
+			opcode_string[2] = (uint8_t)(argument >> 8);
+			return opcode_string;
 		}case ABSOLUTE_X: {
-			return 3;
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)(argument);
+			opcode_string[2] = (uint8_t)(argument >> 8);
+			return opcode_string;
 		}case ABSOLUTE_Y: {
-			return 3;
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)(argument);
+			opcode_string[2] = (uint8_t)(argument >> 8);
+			return opcode_string;
 		}case INDIRECT_X: {
-			return 2;
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)(argument);
+			return opcode_string;
 		}case INDIRECT_Y: {
-			return 2;
+			opcode_string[0] = opcode;
+			opcode_string[1] = (uint8_t)(argument);
+			return opcode_string;
 		}default:{
-			return -1;
+			return 0;
 		}
 	}
 }

@@ -4,21 +4,21 @@
 uint8_t opcode(MODES mode){
 	switch(mode){
 		case IMMEDIATE: {
-			return 2;
+			return 0x69;
 		}case ZERO_PAGE: {
-			return 2;
+			return 0x65;
 		}case ZERO_PAGE_X: {
-			return 2;
+			return 0x75;
 		}case ABSOLUTE: {
-			return 3;
+			return 0x6D;
 		}case ABSOLUTE_X: {
-			return 3;
+			return 0x7D;
 		}case ABSOLUTE_Y: {
-			return 3;
+			return 0x79;
 		}case INDIRECT_X: {
-			return 2;
+			return 0x61;
 		}case INDIRECT_Y: {
-			return 2;
+			return 0x71;
 		}default:{
 			return -1;
 		}
@@ -49,11 +49,8 @@ uint8_t size(MODES mode){
 	}
 }
 
-char* decode_instruction(uint16_t argument, MODES mode){
-	switch(mode){
-		case I
-	}
-	return generate_opcode_string(size(mode), mode, )
+uint8_t* decode_instruction(uint16_t argument, MODES mode){
+	return generate_opcode_string(size(mode), mode, opcode(mode), argument);
 }
 
 void registerADCInstruction(){
@@ -68,5 +65,6 @@ void registerADCInstruction(){
 	adc->modes[5] = ABSOLUTE_Y;
 	adc->modes[6] = INDIRECT_X;
 	adc->modes[7] = INDIRECT_Y;
+	adc->opcode = &opcode;
 	adc->size = &size;	
 }
