@@ -25,34 +25,6 @@ static uint8_t opcode(MODES mode){
 	}
 }
 
-static uint8_t size(MODES mode){
-	switch(mode){
-		case IMMEDIATE: {
-			return 2;
-		}case ZERO_PAGE: {
-			return 2;
-		}case ZERO_PAGE_X: {
-			return 2;
-		}case ABSOLUTE: {
-			return 3;
-		}case ABSOLUTE_X: {
-			return 3;
-		}case ABSOLUTE_Y: {
-			return 3;
-		}case INDIRECT_X: {
-			return 2;
-		}case INDIRECT_Y: {
-			return 2;
-		}default:{
-			return -1;
-		}
-	}
-}
-
-__attribute__((unused)) static uint8_t* decode_instruction(uint16_t argument, MODES mode){
-	return generate_opcode_string(size(mode), mode, opcode(mode), argument);
-}
-
 Instruction* registerANDInstruction(){
 	Instruction* and = (Instruction*) malloc(sizeof(Instruction));
 	and->name = "AND";
@@ -67,7 +39,5 @@ Instruction* registerANDInstruction(){
 	and->modes[6] = INDIRECT_X;
 	and->modes[7] = INDIRECT_Y;
 	and->opcode = &opcode;
-	and->size = &size;	
-	and->decode_instruction = &decode_instruction;
 	return and;
 }

@@ -19,28 +19,6 @@ static uint8_t opcode(MODES mode){
 	}
 }
 
-static uint8_t size(MODES mode){
-	switch(mode){
-		case ACCUMULATOR: {
-			return 1;
-		}case ZERO_PAGE: {
-			return 2;
-		}case ZERO_PAGE_X: {
-			return 2;
-		}case ABSOLUTE: {
-			return 3;
-		}case ABSOLUTE_X: {
-			return 3;
-		}default:{
-			return -1;
-		}
-	}
-}
-
-__attribute__((unused)) static uint8_t* decode_instruction(uint16_t argument, MODES mode){
-	return generate_opcode_string(size(mode), mode, opcode(mode), argument);
-}
-
 Instruction* registerASLInstruction(){
 	Instruction* asl = (Instruction*) malloc(sizeof(Instruction));
 	asl->name = "ASL";
@@ -52,7 +30,5 @@ Instruction* registerASLInstruction(){
 	asl->modes[3] = ABSOLUTE;
 	asl->modes[4] = ABSOLUTE_X;
 	asl->opcode = &opcode;
-	asl->size = &size;	
-	asl->decode_instruction = &decode_instruction;
 	return asl;
 }

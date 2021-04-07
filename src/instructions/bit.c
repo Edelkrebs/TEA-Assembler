@@ -13,22 +13,6 @@ static uint8_t opcode(MODES mode){
 	}
 }
 
-static uint8_t size(MODES mode){
-	switch(mode){
-		case ZERO_PAGE: {
-			return 2;
-		}case ABSOLUTE: {
-			return 3;
-		}default:{
-			return -1;
-		}
-	}
-}
-
-__attribute__((unused)) static uint8_t* decode_instruction(uint16_t argument, MODES mode){
-	return generate_opcode_string(size(mode), mode, opcode(mode), argument);
-}
-
 Instruction* registerBITInstruction(){
 	Instruction* bit = (Instruction*) malloc(sizeof(Instruction));
 	bit->name = "BIT";
@@ -37,7 +21,5 @@ Instruction* registerBITInstruction(){
 	bit->modes[0] = ZERO_PAGE;
 	bit->modes[1] = ABSOLUTE;
 	bit->opcode = &opcode;
-	bit->size = &size;	
-	bit->decode_instruction = &decode_instruction;
 	return bit;
 }

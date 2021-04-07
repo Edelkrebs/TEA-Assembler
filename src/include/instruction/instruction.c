@@ -4,6 +4,39 @@
 #include <stddef.h>
 #include <string.h>
 
+uint8_t getSize(MODES mode){
+	switch(mode){
+		case ACCUMULATOR: {
+			return 1;
+		}case IMMEDIATE: {
+			return 2;
+		}case ZERO_PAGE: {
+			return 2;
+		}case ZERO_PAGE_X: {
+			return 2;
+		}case ZERO_PAGE_Y: {
+			return 2;
+		}case IMPLIED: {
+			return 1;
+		}case RELATIVE: {
+			return 2;
+		}case ABSOLUTE: {
+			return 3;
+		}case ABSOLUTE_X: {
+			return 3;
+		}case ABSOLUTE_Y: {
+			return 3;
+		}case INDIRECT_X: {
+			return 2;
+		}case INDIRECT_Y: {
+			return 2;
+		}case ABSOLUTE_INDIRECT: {
+			return 3;
+		}
+	}
+	return 0;
+}
+
 uint8_t* generate_opcode_string(uint8_t size, MODES mode, uint8_t opcode, uint16_t argument){
 	if(((mode == ABSOLUTE) && (size != 3)) || ((mode == ABSOLUTE_X) && (size != 3)) || ((mode == ABSOLUTE_Y) && (size != 3))){
 		printf("Invalid operation size.Aborting\n");
