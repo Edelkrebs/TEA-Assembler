@@ -2,7 +2,6 @@
 #define __PARSER_H
 
 #include <stdint.h>
-
 #include <instruction/instruction.h>
 
 uint16_t line_number;

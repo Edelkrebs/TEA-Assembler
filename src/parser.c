@@ -7,6 +7,9 @@
 #include <instruction/instruction.h>
 #include <fileio.h>
 
+extern uint8_t* assembled_code;
+extern uint16_t assembled_code_index;
+
 void error(const char* message){
 	printf("[ERROR] at line: %d\n%s\nWith message:\n%s\n", line_number, file_buffer[line_number - 1],  message);
 	exit(-1);
@@ -121,8 +124,9 @@ uint8_t* parse_line(const char* line){
 	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), getArgument(line, mode));
 
 	for(int i = 0; i < size; i++){
-		printf("%x\n", opcode_string[i]);
+		assembled_code[assembled_code_index + i] = opcode_string[i];
 	}
+	assembled_code_index += size;
 	
 	return 0;
 }
