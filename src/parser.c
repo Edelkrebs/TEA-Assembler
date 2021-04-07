@@ -82,10 +82,12 @@ MODES getMode(const char* line){
 			return -1;
 		}
 	}
+	error("Could not get addressing mode!");
 	return ABSOLUTE;
 }
 
 uint8_t* parse_line(const char* line){
+	printf("%s\n", line);
 	line_number++;
 	char* opcode = (char*) malloc(4 * sizeof(char));
 	MODES mode;
@@ -94,15 +96,18 @@ uint8_t* parse_line(const char* line){
 	char* without_whitespaces = (char*) malloc(strlen(line) * sizeof(char));
 {
 	int i = 0, j = 0;
-	while(line[i] != '\0'){
+	while(line[i]){
 		if(line[i] != ' '){
-           	without_whitespaces[j++] = line[i];
+			without_whitespaces[j++] = line[i];
 		}
 		i++;
-    }
+	}
+	without_whitespaces[j] = '\0';
 }
+	printf("%s\n", without_whitespaces);
 	memcpy(opcode, without_whitespaces, 3);
 	opcode[3] = '\0';
+//	printf("%s\n", without_whitespaces);
 
 	if(strlen(without_whitespaces) > 4){
 		mode = getMode(without_whitespaces);

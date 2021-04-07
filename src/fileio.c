@@ -35,7 +35,7 @@ void readFileToBuffer(const char* file_name){
 		if(c == '\n'){
 			file_buffer[line_index] = code;
 			code = malloc(8192);
-			code[n++] = '\0';
+			code[n + 1] = '\0';
 			line_index++;
 			n = 0;
 			continue;
