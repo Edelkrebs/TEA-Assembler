@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <fileio.h>
 #include <instruction/instruction.h>
+#include <parser.h>
 
 int main(int argc, char* argv[]){
 
@@ -11,8 +12,8 @@ int main(int argc, char* argv[]){
 	}
 
 	readFileToBuffer(argv[1]);
-	printf("%s\n", file_buffer[0]);
 	initInstructionset();
+	parse_line(file_buffer[0]);
 
 	return 0;	
 
