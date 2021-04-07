@@ -5,6 +5,10 @@
 
 #include <instruction/instruction.h>
 
+uint16_t line_number;
+
+void error(const char* message);
+uint16_t getArgument(const char* line, MODES mode);
 MODES getMode(const char* argument);
 uint8_t* parse_line(const char* line);
 

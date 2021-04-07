@@ -3,7 +3,7 @@
 
 static uint8_t opcode(MODES mode){
 	switch(mode){
-		case RELATIVE: {
+		case IMPLIED: {
 			return 0x00;
 		}default:{
 			return -1;
