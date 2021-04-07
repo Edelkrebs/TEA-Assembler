@@ -1,2 +1,2 @@
-ADC $FFAA, X
+ADC $FF,X
 ADC $AA

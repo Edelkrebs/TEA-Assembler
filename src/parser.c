@@ -15,13 +15,13 @@ void error(const char* message){
 	exit(-1);
 }
 
-uint16_t getArgument(const char* line, MODES mode){
+uint16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
 	uint16_t dollar_sign = 0;
 	uint16_t argument = 0;
-	while(line[dollar_sign] != '$') dollar_sign++;
+	while(line[dollar_sign] != '$') dollar_sign++; 
 	dollar_sign++;
 	int shift_index = (getSize(mode) - 1) * 2 - 1;
-	for(int i = 0; i < (getSize(mode) - 1) * 2; i++){ //TODO: Rewrite bc sucks
+	for(int i = 0; i < (getSize(mode) - 1) * 2; i++){
 		if(line[i + dollar_sign] >= '0' && line[i + dollar_sign] <= '9'){
 			argument |= (line[i + dollar_sign] - '0') << (4 * shift_index);  
 			shift_index--;
@@ -38,9 +38,11 @@ uint16_t getArgument(const char* line, MODES mode){
 
 MODES getMode(const char* line){
 	int line_len = strlen(line);
-	char* argument = (char*) malloc(line_len - 3); 
-	memcpy(argument, line + 3, line_len - 3);
+	char* argument = (char*) malloc(line_len); 
+	memcpy(argument, line + 3, line_len);
 	int argument_len = strlen(argument);
+	//printf("%s\n", argument);
+	//printf("Line len: %d\n", (int) strlen(argument));
 	switch(argument[0]){
 		case '#':{
 			if(argument[1] == '$')return IMMEDIATE;
@@ -48,7 +50,8 @@ MODES getMode(const char* line){
 		}	
 		case 'A': return ACCUMULATOR;
 		case '$':{
-			if(argument_len < 6 && argument[argument_len - 2] == ','){
+			if(argument_len <= 6 && argument[argument_len - 2] == ','){
+				printf("deez");
 				if(argument[argument_len - 1] == 'X'){
 					return ZERO_PAGE_X;
 				}else if(argument[argument_len - 1] == 'Y'){
@@ -62,9 +65,9 @@ MODES getMode(const char* line){
 				}else if(argument[argument_len - 1] == 'Y'){
 					return ABSOLUTE_Y;
 				}
-			}else if(argument_len < 4){
+			}else if(argument_len <= 5){
 				return ZERO_PAGE;
-			}else if(argument_len > 4){
+			}else if(argument_len > 5){
 				return ABSOLUTE;
 			}	
 		}case '(':{
@@ -86,7 +89,7 @@ MODES getMode(const char* line){
 	return ABSOLUTE;
 }
 
-uint8_t* parse_line(const char* line){
+void parse_line(const char* line){
 	printf("%s\n", line);
 	line_number++;
 	char* opcode = (char*) malloc(4 * sizeof(char));
@@ -104,10 +107,8 @@ uint8_t* parse_line(const char* line){
 	}
 	without_whitespaces[j] = '\0';
 }
-	printf("%s\n", without_whitespaces);
 	memcpy(opcode, without_whitespaces, 3);
 	opcode[3] = '\0';
-//	printf("%s\n", without_whitespaces);
 
 	if(strlen(without_whitespaces) > 4){
 		mode = getMode(without_whitespaces);
@@ -125,13 +126,18 @@ uint8_t* parse_line(const char* line){
 
 	size = getSize(mode);
 	argument = getArgument(line, mode);
-	argument++;
-	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), getArgument(line, mode));
+	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), argument);
+
+	if(size == 2){
+		assembled_code[assembled_code_index] = opcode_string[0];
+		assembled_code[assembled_code_index + 1] = opcode_string[2];
+		assembled_code_index += size;
+		return;
+	}
 
 	for(int i = 0; i < size; i++){
 		assembled_code[assembled_code_index + i] = opcode_string[i];
 	}
-	assembled_code_index += size;
 	
-	return 0;
+	assembled_code_index += size;
 }
