@@ -13,7 +13,6 @@ void error(const char* message){
 }
 
 uint16_t getArgument(const char* line, MODES mode){
-	printf("%s\n", line);
 	uint16_t dollar_sign = 0;
 	uint16_t argument = 0;
 	while(line[dollar_sign] != '$') dollar_sign++;
@@ -22,15 +21,12 @@ uint16_t getArgument(const char* line, MODES mode){
 	for(int i = 0; i < (getSize(mode) - 1) * 2; i++){ //TODO: Rewrite bc sucks
 		if(line[i + dollar_sign] >= '0' && line[i + dollar_sign] <= '9'){
 			argument |= (line[i + dollar_sign] - '0') << (4 * shift_index);  
-			printf("%x\n", argument);
 			shift_index--;
 		}else if(line[i + dollar_sign] >= 'A' && line[i + dollar_sign] <= 'F'){
 			argument |= (line[i + dollar_sign] - 'A' + 10) << (4 * shift_index);  
-			printf("%x\n", argument);
 			shift_index--;
 		}else if(line[i + dollar_sign] >= 'a' && line[i + dollar_sign] <= 'f'){
 			argument |= (line[i + dollar_sign] - 'a' + 10) << (4 * shift_index);  
-			printf("%x\n", argument);
 			shift_index--;
 		}
 	}
@@ -122,7 +118,7 @@ uint8_t* parse_line(const char* line){
 	size = getSize(mode);
 	argument = getArgument(line, mode);
 	argument++;
-	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), (uint16_t)0x0);
+	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), getArgument(line, mode));
 
 	for(int i = 0; i < size; i++){
 		printf("%x\n", opcode_string[i]);

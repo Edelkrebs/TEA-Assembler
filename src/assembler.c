@@ -13,7 +13,10 @@ int main(int argc, char* argv[]){
 
 	readFileToBuffer(argv[1]);
 	initInstructionset();
-	parse_line(file_buffer[0]);
+
+	for(int i = 0; i < line_count; i++){
+		parse_line(file_buffer[i]);
+	}
 
 	return 0;	
 

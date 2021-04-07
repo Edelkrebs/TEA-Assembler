@@ -1,2 +1,2 @@
-ADC $FFfF
-
+ADC $FFAA, X
+ADC $AAFF, Y
