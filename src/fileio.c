@@ -46,8 +46,6 @@ void readFileToBuffer(const char* file_name){
 
 	code[n + 1] = '\0';
 	file_buffer[line_index] = code;
-	printf("Length: %d\n", (int)strlen(file_buffer[0]));
-	printf("Length: %d\n", (int)strlen(file_buffer[1]));
 	line_count = line_index + 1;
 
 	fclose(file);

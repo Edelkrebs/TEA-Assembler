@@ -6,6 +6,7 @@
 
 uint16_t assembled_code_index;
 uint8_t* assembled_code;
+uint16_t origin = 0;
 
 int main(int argc, char* argv[]){
 
