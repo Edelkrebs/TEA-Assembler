@@ -33,7 +33,7 @@ void readFileToBuffer(const char* file_name){
 	code = malloc(8192);
 	int line_index = 0;
 	while ((c = fgetc(file)) != EOF){
-		if((n == 0 && c == '\n') || (n == 0 && c == '\t') || (n == 0 && c == '\0') || (n == 0 && c == ' ')){
+		if((n == 0 && c == '\n') || (n == 0 && c == '\t') || (n == 0 && c == '\0') || (n == 0 && c == ' ') || (n == 0 && c == ';')){
 			n = 0;
 			continue;		
 		}
