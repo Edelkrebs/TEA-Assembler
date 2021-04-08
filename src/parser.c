@@ -9,10 +9,29 @@
 
 extern uint8_t* assembled_code;
 extern uint16_t assembled_code_index;
+extern char* labels;
+extern uint16_t labels_index;
 
 void error(const char* message){
 	printf("[ERROR] at line: %d\n%s\nWith message:\n%s\n", line_number, file_buffer[line_number - 1],  message);
 	exit(-1);
+}
+
+LINE_TYPE getLineType(const char* line){
+	uint16_t special_char_index = 0;
+	while(line[special_char_index] != ':' && line[special_char_index] != '=' && line[special_char_index] != '.' && special_char_index != strlen(line)) special_char_index++;
+	if(special_char_index == strlen(line)) return INSTRUCTION;
+	if(line[special_char_index] == ':'){
+		printf("LABEL\n");
+		return LABEL;
+	}else if(line[special_char_index] == '='){
+		printf("VARIABLE\n");
+		return VARIABLE;
+	}else if(line[special_char_index] == '.'){
+		printf("DIRECTIVE\n");
+		return DIRECTIVE;
+	}
+	return INVALID_LINE;
 }
 
 uint16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
@@ -86,16 +105,69 @@ MODES getMode(const char* line){
 			return -1;
 		}
 	}
+	free(argument);
 	error("Could not get addressing mode!");
 	return ABSOLUTE;
 }
 
-void parse_line(const char* line){
-	line_number++;
+void processInstruction(const char* without_whitespaces){
 	char* opcode = (char*) malloc(4 * sizeof(char));
 	MODES mode;
 	uint8_t size = 0;
 	uint16_t argument = 0;
+
+	memcpy(opcode, without_whitespaces, 3);
+	opcode[3] = '\0';
+	
+	if(getInstruction(opcode) == NULL) error("Unrecognized instruction!");
+	
+	if(strlen(without_whitespaces) >= 4){
+		mode = getMode(without_whitespaces);
+	}else{
+		mode = IMPLIED;
+	}
+	
+	if(mode == -1){
+		error("Couldnt guess addressing mode!");
+	}
+		
+	if(getInstruction(opcode)->opcode(mode) == 0xFF){
+		error("Addressing mode not supported by instruction!");
+	}
+	
+	size = getSize(mode);
+	if(mode != ACCUMULATOR && mode != IMPLIED)argument = getArgument(without_whitespaces, mode);
+	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), argument);
+		
+	for(int i = 0; i < size; i++){
+		assembled_code[assembled_code_index + i] = opcode_string[i];
+	}
+		
+	assembled_code_index += size;
+	free(opcode_string);
+	free(opcode);
+}
+
+void processVariable(const char* without_whitespaces){
+	
+}
+
+void processLabel(const char* without_whitespaces){
+	char* label_name;
+	label_name = (char*) malloc(strlen(without_whitespaces) + 1 * sizeof(char));
+	memcpy(label_name, without_whitespaces, strlen(without_whitespaces));
+	label_name[strlen(without_whitespaces + 1)] = assembled_code_index << 8;
+	label_name[strlen(without_whitespaces)] = (char)assembled_code_index;
+	printf("%s\n", label_name);
+}
+
+void processDirective(const char* without_whitespaces){
+	
+}
+
+void parse_line(const char* line){
+	line_number++;
+	LINE_TYPE linetype;
 	char* without_whitespaces = (char*) malloc(strlen(line) * sizeof(char));
 {
 	int i = 0, j = 0;
@@ -108,32 +180,18 @@ void parse_line(const char* line){
 	}
 	without_whitespaces[j] = '\0';
 }
-	memcpy(opcode, without_whitespaces, 3);
-	opcode[3] = '\0';
+	linetype = getLineType(without_whitespaces);
 
-	if(getInstruction(opcode) == NULL) error("Unrecognized instruction!");
+	if(linetype == INVALID_LINE) error("Undefined syntax error.");
 
-	if(strlen(without_whitespaces) >= 4){
-		mode = getMode(without_whitespaces);
-	}else{
-		mode = IMPLIED;
+	if(linetype == INSTRUCTION){
+		processInstruction(without_whitespaces);
+	}else if(linetype == VARIABLE){
+		processVariable(without_whitespaces);
+	}else if(linetype == LABEL){
+		processLabel(without_whitespaces);
+	}else if(linetype == DIRECTIVE){
+		processDirective(without_whitespaces);
 	}
-
-	if(mode == -1){
-		error("Couldnt guess addressing mode!");
-	}
-	
-	if(getInstruction(opcode)->opcode(mode) == 0xFF){
-		error("Addressing mode not supported by instruction!");
-	}
-	
-	size = getSize(mode);
-	if(mode != ACCUMULATOR && mode != IMPLIED)argument = getArgument(line, mode);
-	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), argument);
-	
-	for(int i = 0; i < size; i++){
-		assembled_code[assembled_code_index + i] = opcode_string[i];
-	}
-	
-	assembled_code_index += size;
+	free(without_whitespaces);
 }
