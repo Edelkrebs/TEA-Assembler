@@ -66,6 +66,7 @@ MODES getMode(const char* line){
 					return ABSOLUTE_Y;
 				}
 			}else if(argument_len <= 3){
+				if(line[0] == 'B') return RELATIVE;
 				return ZERO_PAGE;
 			}else if(argument_len > 3){
 				return ABSOLUTE;
@@ -99,7 +100,8 @@ void parse_line(const char* line){
 {
 	int i = 0, j = 0;
 	while(line[i]){
-		if(line[i] != ' '){
+		if(line[i] != ' ' && line[i] != '\t'){
+			if(line[i] == ';') break;
 			without_whitespaces[j++] = line[i];
 		}
 		i++;
