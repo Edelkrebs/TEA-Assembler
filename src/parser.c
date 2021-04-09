@@ -154,10 +154,12 @@ void processVariable(const char* without_whitespaces){
 
 void processLabel(const char* without_whitespaces){
 	char* label_name;
-	label_name = (char*) malloc(strlen(without_whitespaces) + 1 * sizeof(char));
-	memcpy(label_name, without_whitespaces, strlen(without_whitespaces));
-	label_name[strlen(without_whitespaces + 1)] = assembled_code_index << 8;
-	label_name[strlen(without_whitespaces)] = (char)assembled_code_index;
+	uint16_t arg_len = strlen(without_whitespaces);
+	label_name = (char*) malloc(strlen(without_whitespaces) + 2 * sizeof(char));
+	memcpy(label_name, without_whitespaces, strlen(without_whitespaces) - 2);
+	label_name[arg_len] = '\0';
+	//label_name[arg_len] = assembled_code_index << 8;
+	//label_name[arg_len] = (char)((uint8_t)assembled_code_index);
 	printf("%s\n", label_name);
 }
 
