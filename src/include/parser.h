@@ -7,12 +7,19 @@
 uint16_t line_number;
 
 typedef enum{
+	PREPROCESSING,
+	ASSEMBLING
+} PARSING_STATE;
+
+typedef enum{
 	INSTRUCTION,
 	VARIABLE,
 	LABEL,
 	DIRECTIVE,
 	INVALID_LINE
 } LINE_TYPE;
+
+PARSING_STATE parsing_state;
 
 void error(const char* message);
 LINE_TYPE getLineType(const char* line);

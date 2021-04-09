@@ -24,6 +24,14 @@ int main(int argc, char* argv[]){
 	readFileToBuffer(argv[1]);
 	initInstructionset();
 
+	parsing_state = PREPROCESSING;
+	for(int i = 0; i < line_count; i++){
+		parse_line(file_buffer[i]);
+	}
+
+	assembled_code_index = 0;
+
+	parsing_state = ASSEMBLING;
 	for(int i = 0; i < line_count; i++){
 		parse_line(file_buffer[i]);
 	}
