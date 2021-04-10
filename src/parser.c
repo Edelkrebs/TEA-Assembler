@@ -9,7 +9,7 @@
 
 extern uint8_t* assembled_code;
 extern uint16_t assembled_code_index;
-extern char* labels;
+extern char* labels[];
 extern uint16_t labels_index;
 
 void error(const char* message){
@@ -99,6 +99,13 @@ MODES getMode(const char* line){
 			}
 		}
 		default:{
+			if(labels_index > 0){
+				for(int i = 0; i < labels_index; i++){
+					if(strcmp(labels[i], argument) == 0){
+						
+					}
+				}	
+			}
 			return -1;
 		}
 	}
@@ -154,8 +161,18 @@ void processLabel(const char* without_whitespaces){ // The last 2 bytes of the n
 	char* label_name = (char*) malloc(strlen(without_whitespaces) + 2);
 	memcpy(label_name, without_whitespaces, strlen(without_whitespaces) - 1);
 	uint8_t label_len = strlen(label_name);
+	label_name[label_len] = '\0';
 	label_name[label_len + 1] =  assembled_code_index << 8;
 	label_name[label_len + 2] =  (char)assembled_code_index;
+	if(labels_index > 0){
+		for(int i = 0; i < labels_index; i++){
+			if(strcmp(labels[i], label_name) == 0){
+				error("Redefined label");
+			}
+		}	
+	}
+	labels[labels_index] = label_name;
+	labels_index++;
 }
 
 void processDirective(const char* without_whitespaces){
@@ -196,6 +213,5 @@ void parse_line(const char* line){
 			break;
 		}default: error("Wtf? It isnt supposed to reach this.");
 	}
-	
 	free(without_whitespaces);
 }

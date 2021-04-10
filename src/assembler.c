@@ -7,12 +7,11 @@
 uint16_t assembled_code_index = 0;
 uint8_t* assembled_code;
 uint16_t origin = 0;
-char* labels;
-uint16_t lables_index = 0;
+char* labels[8192];
+uint16_t labels_index = 0;
 
 int main(int argc, char* argv[]){
 
-	labels = (char*) malloc(8192 * sizeof(char)); //First 2 bytes of a label will always be its position in code
 	assembled_code = (uint8_t*) malloc(16392 * sizeof(uint8_t));
 
 	if(argc == 2){
@@ -40,7 +39,14 @@ int main(int argc, char* argv[]){
 		printf("%x\n", assembled_code[i]);
 	}
 
-	free(labels);
+	for(int i = 0; i < labels_index; i++){
+		printf("%s\n", labels[i]);
+	}
+
+	for(int i = 0; i < 8192; i++){
+		free(labels[i]);
+	}
+
 	free(assembled_code);
 
 	return 0;	
