@@ -14,7 +14,7 @@ static uint8_t opcode(MODES mode){
 Instruction* registerBVCInstruction(){
 	Instruction* bvc = (Instruction*) malloc(sizeof(Instruction));
 	bvc->name = "BVC";
-	bvc->modes_count = 1;
+	bvc->modes_count = 2;
 	bvc->modes = (MODES*) malloc(bvc->modes_count * sizeof(int));
 	bvc->modes[0] = RELATIVE;
 	bvc->opcode = &opcode;

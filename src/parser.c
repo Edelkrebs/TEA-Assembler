@@ -34,6 +34,15 @@ LINE_TYPE getLineType(const char* line){
 uint16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
 	uint16_t dollar_sign = 0;
 	uint16_t argument = 0;
+	if(strchr(line, '$') == 0){
+		char* argument_str = (char*) malloc(strlen(line) - 2);
+		memcpy(argument_str, line + 3, strlen(line) - 2);
+		for(int i = 0; i < labels_index; i++){
+			if(strcmp(labels[i], argument_str) == 0){
+				
+			}
+		}
+	}
 	while(line[dollar_sign] != '$') dollar_sign++; 
 	dollar_sign++;
 	int shift_index = (getSize(mode) - 1) * 2 - 1;
@@ -99,13 +108,8 @@ MODES getMode(const char* line){
 			}
 		}
 		default:{
-			if(labels_index > 0){
-				for(int i = 0; i < labels_index; i++){
-					if(strcmp(labels[i], argument) == 0){
-						
-					}
-				}	
-			}
+			if(line[0] == 'B') return RELATIVE;
+			if(line[0] == 'J') return ABSOLUTE;
 			return -1;
 		}
 	}
@@ -140,7 +144,9 @@ void processInstruction(const char* without_whitespaces){
 	}
 	
 	size = getSize(mode);
-	if(mode != ACCUMULATOR && mode != IMPLIED)argument = getArgument(without_whitespaces, mode);
+	if(parsing_state != PREPROCESSING){
+		if(mode != ACCUMULATOR && mode != IMPLIED)argument = getArgument(without_whitespaces, mode);
+	}
 	uint8_t* opcode_string = generate_opcode_string(size, mode, getInstruction(opcode)->opcode(mode), argument);
 	if(parsing_state != PREPROCESSING){
 		for(int i = 0; i < size; i++){

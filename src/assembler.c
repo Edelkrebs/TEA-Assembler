@@ -29,6 +29,7 @@ int main(int argc, char* argv[]){
 	}
 
 	assembled_code_index = 0;
+	line_number = 0;
 
 	parsing_state = ASSEMBLING;
 	for(int i = 0; i < line_count; i++){
