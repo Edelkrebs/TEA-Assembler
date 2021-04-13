@@ -23,7 +23,7 @@ PARSING_STATE parsing_state;
 
 void error(const char* message);
 LINE_TYPE getLineType(const char* line);
-uint16_t getArgument(const char* line, MODES mode);
+int16_t getArgument(const char* line, MODES mode);
 MODES getMode(const char* argument);
 
 void processInstruction(const char* without_whitespaces);

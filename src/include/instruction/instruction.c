@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <string.h>
 
+#include <parser.h>
+
 uint8_t getSize(MODES mode){
 	switch(mode){
 		case ACCUMULATOR: {

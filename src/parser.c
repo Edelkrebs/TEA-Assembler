@@ -31,15 +31,40 @@ LINE_TYPE getLineType(const char* line){
 	return INVALID_LINE;
 }
 
-uint16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
+int16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
 	uint16_t dollar_sign = 0;
-	uint16_t argument = 0;
+	int16_t argument = 0;
 	if(strchr(line, '$') == 0){
-		char* argument_str = (char*) malloc(strlen(line) - 2);
-		memcpy(argument_str, line + 3, strlen(line) - 2);
+		char* argument_str = (char*) malloc(strlen(line));
+		memcpy(argument_str, line + 3, strlen(line));
 		for(int i = 0; i < labels_index; i++){
-			if(strcmp(labels[i], argument_str) == 0){
-				
+				printf("wahzt %s\n", labels[i]);
+			if(mode == RELATIVE){
+				if(strcmp(labels[i], argument_str) == 0){
+
+					argument |= labels[i][strlen(labels[i]) + 1] << 8;
+					argument |= labels[i][strlen(labels[i]) + 2];
+
+					if(assembled_code_index > argument){
+						argument = argument - assembled_code_index;
+						return argument;
+					}else{
+						argument = assembled_code_index - argument;
+						return ~argument;
+					}
+				}
+			}else if(mode == ABSOLUTE){
+				printf("Swag %x\n", labels[i][strlen(labels[i]) + 2]);
+				printf("sss %d\n", strcmp(argument_str, labels[i]));
+				printf("mmm %s\n", labels[i]);
+				printf("mmm %s\n", argument_str);
+				printf("eee %d\n", argument_str[strlen(labels[i])]);
+				if(strcmp(labels[i], argument_str) == 0){
+					argument |= labels[i][strlen(labels[i]) + 1];
+					argument |= labels[i][strlen(labels[i]) + 2] << 8;
+					printf("ARG: %x\n", argument);
+					return argument;
+				}
 			}
 		}
 	}
@@ -108,8 +133,12 @@ MODES getMode(const char* line){
 			}
 		}
 		default:{
-			if(line[0] == 'B') return RELATIVE;
-			if(line[0] == 'J') return ABSOLUTE;
+			if(line[0] == 'B'){
+				return RELATIVE;	
+			} 
+			if(line[0] == 'J'){
+				return ABSOLUTE;	
+			} 
 			return -1;
 		}
 	}

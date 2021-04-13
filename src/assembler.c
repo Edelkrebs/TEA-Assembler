@@ -4,6 +4,8 @@
 #include <instruction/instruction.h>
 #include <parser.h>
 
+#include <string.h>
+
 uint16_t assembled_code_index = 0;
 uint8_t* assembled_code;
 uint16_t origin = 0;
@@ -38,10 +40,6 @@ int main(int argc, char* argv[]){
 
 	for(int i = 0; i < assembled_code_index; i++){
 		printf("%x\n", assembled_code[i]);
-	}
-
-	for(int i = 0; i < labels_index; i++){
-		printf("%s\n", labels[i]);
 	}
 
 	for(int i = 0; i < 8192; i++){
