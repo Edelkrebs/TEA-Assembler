@@ -38,13 +38,8 @@ int16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
 		char* argument_str = (char*) malloc(strlen(line));
 		memcpy(argument_str, line + 3, strlen(line));
 		for(int i = 0; i < labels_index; i++){
-				printf("wahzt %s\n", labels[i]);
 			if(mode == RELATIVE){
 				if(strcmp(labels[i], argument_str) == 0){
-
-					argument |= labels[i][strlen(labels[i]) + 1] << 8;
-					argument |= labels[i][strlen(labels[i]) + 2];
-
 					if(assembled_code_index > argument){
 						argument = argument - assembled_code_index;
 						return argument;
@@ -54,15 +49,9 @@ int16_t getArgument(const char* line, MODES mode){  //TODO: Rewrite bc sucks
 					}
 				}
 			}else if(mode == ABSOLUTE){
-				printf("Swag %x\n", labels[i][strlen(labels[i]) + 2]);
-				printf("sss %d\n", strcmp(argument_str, labels[i]));
-				printf("mmm %s\n", labels[i]);
-				printf("mmm %s\n", argument_str);
-				printf("eee %d\n", argument_str[strlen(labels[i])]);
 				if(strcmp(labels[i], argument_str) == 0){
 					argument |= labels[i][strlen(labels[i]) + 1];
 					argument |= labels[i][strlen(labels[i]) + 2] << 8;
-					printf("ARG: %x\n", argument);
 					return argument;
 				}
 			}
@@ -195,10 +184,10 @@ void processVariable(const char* without_whitespaces){
 void processLabel(const char* without_whitespaces){ // The last 2 bytes of the null terminated label are the position of the label in memory
 	char* label_name = (char*) malloc(strlen(without_whitespaces) + 2);
 	memcpy(label_name, without_whitespaces, strlen(without_whitespaces) - 1);
-	uint8_t label_len = strlen(label_name);
-	label_name[label_len] = '\0';
-	label_name[label_len + 1] =  assembled_code_index << 8;
-	label_name[label_len + 2] =  (char)assembled_code_index;
+	uint8_t label_len = strlen(without_whitespaces);
+	label_name[label_len - 1] = '\0';
+	label_name[label_len] =  assembled_code_index << 8;
+	label_name[label_len + 1] =  (char)assembled_code_index;
 	if(labels_index > 0){
 		for(int i = 0; i < labels_index; i++){
 			if(strcmp(labels[i], label_name) == 0){
